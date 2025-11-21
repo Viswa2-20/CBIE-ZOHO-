@@ -1,10 +1,10 @@
-# Cognitive Buyer Intent Engine (CBIE) 🧠🤖
+# Cognitive Buyer Intent Engine (CBIE) 
 
 > **A Production-Ready AI SalesIQ Bot for Zoho Cliqtrix**
 
 CBIE is an advanced AI-driven chatbot system designed for Zoho SalesIQ. It goes beyond simple scripted responses by using Machine Learning to detect buyer intent, sentiment, and behavioral patterns in real-time, delivering hyper-personalized experiences that drive conversions.
 
-## 🚀 Key Features
+## Key Features
 
 - **Intent Detection**: Uses XGBoost to classify users as "Ready to Buy", "Researching", "Support Needed", etc.
 - **Sentiment Analysis**: Real-time emotion detection (Positive, Negative, Neutral) using DistilBERT.
@@ -12,7 +12,7 @@ CBIE is an advanced AI-driven chatbot system designed for Zoho SalesIQ. It goes 
 - **Dynamic Personality**: The bot adapts its tone (Friendly, Professional, Empathetic) based on user sentiment.
 - **Zoho Integration**: Seamlessly integrates with SalesIQ via Deluge and `invokeUrl`.
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 cbie_system/
@@ -27,7 +27,7 @@ cbie_system/
 └── dashboard/               # Analytics Dashboard Designs
 ```
 
-## 🛠️ Quick Start
+## Quick Start
 
 ### 1. Backend Setup
 1.  Navigate to `backend/`:
@@ -51,12 +51,12 @@ cbie_system/
 4.  Create a function named `invoke_cbie_backend` and paste the content from `zoho_deluge/functions/invoke_backend.deluge`.
 5.  Update the `backend_url` in the function to point to your deployed backend (e.g., on Render/Vercel).
 
-## 🧠 Machine Learning
+## Machine Learning
 - **Train Intent Model**: `python backend/ml_engine/training/train_intent.py`
 - **Train Recommender**: `python backend/ml_engine/training/train_recommender.py`
 
-## 📊 Dashboard
+## Dashboard
 Check `dashboard/` for analytics mockups and implementation details.
 
-## 📄 License
+## License
 MIT License. Built for Zoho Cliqtrix Hackathon.
