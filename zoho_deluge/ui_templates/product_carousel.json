@@ -1,0 +1,44 @@
+{
+  "type": "slider",
+  "slides": [
+    {
+      "title": "Premium Plan",
+      "image": "https://via.placeholder.com/300x200?text=Premium",
+      "buttons": [
+        {
+          "label": "View Details",
+          "action": {
+            "type": "open.url",
+            "data": {
+              "webUrl": "https://your-site.com/pricing"
+            }
+          }
+        },
+        {
+          "label": "Buy Now",
+          "action": {
+            "type": "system.publishText",
+            "data": {
+              "text": "I want to buy the Premium Plan"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Enterprise Plan",
+      "image": "https://via.placeholder.com/300x200?text=Enterprise",
+      "buttons": [
+        {
+          "label": "Contact Sales",
+          "action": {
+            "type": "system.publishText",
+            "data": {
+              "text": "Connect me with sales"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

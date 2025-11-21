@@ -1,0 +1,86 @@
+/*
+  Handler: messageHandler
+  Purpose: Main entry point for user messages
+*/
+response = Map();
+
+// 1. Extract User Info & Message
+message = content;
+session_id = session.get("id");
+visitor_name = visitor.get("name");
+
+// 2. Call Backend for Intent & Sentiment
+payload = Map();
+payload.put("session_id", session_id);
+payload.put("message", message);
+payload.put("user_id", visitor.get("email")); // Assuming email is available
+
+// Call Intent API
+intent_json = invoke_cbie_backend("/predict_intent", payload);
+intent_map = intent_json.toMap();
+intent = intent_map.get("intent");
+
+// Call Sentiment API
+sentiment_json = invoke_cbie_backend("/predict_sentiment", {"message": message});
+sentiment_map = sentiment_json.toMap();
+sentiment = sentiment_map.get("sentiment");
+
+// 3. Logic Branching based on Intent
+reply_text = "";
+action = Map();
+
+if(intent == "ready_to_buy")
+{
+    reply_text = "I see you're interested in purchasing! Here are some recommendations for you:";
+    
+    // Fetch Recommendations
+    rec_payload = {"user_id": visitor.get("email"), "limit": 3};
+    rec_json = invoke_cbie_backend("/recommend", rec_payload);
+    // In a real scenario, parse rec_json and build the slider dynamically.
+    // For now, we use the static template or a simple text list.
+    
+    // Constructing a simple slider response (simplified for Deluge)
+    response.put("type", "slider");
+    response.put("slides", [
+        {"title": "Premium Plan", "image": "https://via.placeholder.com/300", "buttons": [{"label": "Buy", "action": {"type": "system.publishText", "data": {"text": "Buy Premium"}}}]}
+    ]);
+    // Note: In production, use the JSON template logic here.
+}
+else if(intent == "support_needed")
+{
+    if(sentiment == "negative")
+    {
+        reply_text = "I'm sorry to hear you're having trouble. I'm connecting you to a human agent immediately.";
+        response.put("action", "forward");
+        response.put("replies", [reply_text]);
+        return response;
+    }
+    else
+    {
+        reply_text = "I can help with that. Please describe your issue in more detail or check our FAQ.";
+    }
+}
+else if(intent == "pricing_inquiry")
+{
+    reply_text = "Our pricing starts at $99/mo. Would you like to see a comparison?";
+    response.put("suggestions", [{"text": "Yes, show comparison"}, {"text": "No, thanks"}]);
+}
+else
+{
+    // Fallback / General Chat
+    reply_text = "I understand. Tell me more about what you're looking for.";
+}
+
+// 4. Adjust Tone based on Sentiment
+if(sentiment == "positive")
+{
+    reply_text = "Great! " + reply_text;
+}
+else if(sentiment == "negative" && intent != "support_needed")
+{
+    reply_text = "I apologize if things are unclear. " + reply_text;
+}
+
+response.put("text", reply_text);
+
+return response;

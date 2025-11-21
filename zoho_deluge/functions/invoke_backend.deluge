@@ -1,0 +1,42 @@
+/*
+  Function: invoke_cbie_backend
+  Purpose: Call the Python FastAPI backend for intent/sentiment/recommendations
+  Parameters: 
+    - endpoint (string): e.g., "/predict_intent"
+    - payload (map): Data to send
+*/
+string invoke_cbie_backend(string endpoint, map payload)
+{
+    // CONFIGURATION
+    // Replace with your actual deployed backend URL (e.g., from Render/Vercel)
+    // For local testing with ngrok, use the ngrok URL.
+    backend_url = "https://your-backend-url.com/api/v1" + endpoint;
+    
+    headers = Map();
+    headers.put("Content-Type", "application/json");
+    
+    // Convert payload to JSON string
+    // Note: Deluge's invokeUrl expects a map or string for parameters depending on type.
+    // For JSON body, we usually pass it as a string in the 'parameters' or raw body.
+    
+    response = invokeurl
+    [
+        url : backend_url
+        type : POST
+        parameters : payload.toString() 
+        headers : headers
+        detailed : true
+    ];
+    
+    // Log for debugging
+    info "Backend Response: " + response;
+    
+    if(response.get("responseCode") == 200)
+    {
+        return response.get("responseText");
+    }
+    else
+    {
+        return "{\"error\": \"Backend unreachable\"}";
+    }
+}
